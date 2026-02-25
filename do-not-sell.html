@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do Not Sell My Personal Information | Roofing Estimate Now</title>
+    <meta name="description" content="Submit a request to opt out of the sale of your personal information under the California Consumer Privacy Act (CCPA).">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary: #1B5E20;
+            --primary-dark: #0D3B12;
+            --primary-light: #4CAF50;
+            --white: #ffffff;
+            --dark: #1a1a2e;
+            --gray-50: #f8f9fa;
+            --gray-100: #f1f3f5;
+            --gray-200: #e9ecef;
+            --gray-500: #6c757d;
+            --gray-700: #495057;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--dark);
+            background: var(--white);
+            line-height: 1.6;
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 0;
+        }
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+        .nav-logo span { color: var(--primary-light); }
+        .nav-back {
+            font-size: 14px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-back:hover { color: var(--primary-dark); }
+
+        /* ── MAIN ── */
+        main {
+            max-width: 860px;
+            margin: 60px auto 80px;
+            padding: 0 24px;
+        }
+
+        h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            font-size: 15px;
+            color: var(--gray-700);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            max-width: 760px;
+        }
+
+        h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 36px 0 10px;
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        ul {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.8;
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        /* ── FORM ── */
+        .opt-out-form {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 36px;
+            margin-top: 40px;
+        }
+
+        .opt-out-form h2 {
+            margin-top: 0;
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+
+        label .req { color: #c0392b; }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--dark);
+            transition: border-color .2s;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 580px) {
+            .form-row { grid-template-columns: 1fr; }
+            h1 { font-size: 26px; }
+            .opt-out-form { padding: 24px 20px; }
+        }
+
+        .submit-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 700;
+            padding: 14px 36px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background .2s;
+        }
+
+        .submit-btn:hover { background: var(--primary-dark); }
+
+        .form-note {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+
+        /* ── SUCCESS ── */
+        .success-msg {
+            display: none;
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 24px;
+            color: var(--primary-dark);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,.6);
+            text-align: center;
+            padding: 28px 24px;
+            font-size: 13px;
+        }
+        footer a {
+            color: rgba(255,255,255,.5);
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        footer a:hover { color: var(--white); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">Roofing<span>Estimate</span>Now</a>
+        <a href="/" class="nav-back">&#8592; Back to Home</a>
+    </div>
+</nav>
+
+<main>
+    <h1>Do Not Sell My Personal Information</h1>
+    <p class="intro">
+        Under the California Consumer Privacy Act (CCPA), California residents have the right to opt out of the sale of their personal information. Roofing Estimate Now (<strong>roofingestimatenow.com</strong>) may share certain information with our marketing partners in ways that qualify as a "sale" under the CCPA. Use the form below to submit your opt-out request and we will process it within 15 business days.
+    </p>
+
+    <h2>Your Rights Under the CCPA</h2>
+    <p>If you are a California resident, you have the right to:</p>
+    <ul>
+        <li>Know what personal information we collect, use, disclose, and sell.</li>
+        <li>Request deletion of personal information we have collected from you.</li>
+        <li>Opt out of the sale of your personal information.</li>
+        <li>Non-discrimination for exercising your CCPA rights.</li>
+    </ul>
+
+    <h2>What Information We May Sell</h2>
+    <p>We may share with third-party marketing partners the following categories of information you provide when requesting a roofing estimate:</p>
+    <ul>
+        <li>Name and contact information (phone number, email address)</li>
+        <li>Service address and zip code</li>
+        <li>Project type and details (roof type, scope of work)</li>
+        <li>IP address and browser/device identifiers collected via cookies and tracking technologies</li>
+    </ul>
+    <p>This information is used to match you with licensed roofing contractors and may be considered a "sale" under California law even when no money changes hands.</p>
+
+    <h2>How to Opt Out</h2>
+    <p>Complete the form below. Once submitted, we will stop selling your personal information to third parties. Note that this request applies prospectively — it does not affect information already shared prior to your request. We will confirm receipt and processing within 15 business days.</p>
+    <p>You may also submit your request by emailing us at <a href="mailto:privacy@roofingestimatenow.com" style="color:var(--primary);">privacy@roofingestimatenow.com</a> with the subject line "Do Not Sell My Personal Information."</p>
+
+    <div class="opt-out-form">
+        <h2>Opt-Out Request Form</h2>
+        <p class="form-subtitle">All fields marked with <span style="color:#c0392b;">*</span> are required.</p>
+
+        <form id="dnsmiForm" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name <span class="req">*</span></label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Jane" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name <span class="req">*</span></label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Smith" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="req">*</span></label>
+                <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number (optional)</label>
+                <input type="text" id="phone" name="phone" placeholder="(555) 555-5555">
+            </div>
+
+            <div class="form-group">
+                <label for="relationship">Your Relationship to Our Business <span class="req">*</span></label>
+                <select id="relationship" name="relationship" required>
+                    <option value="" disabled selected>Select one...</option>
+                    <option value="customer">I submitted a quote request</option>
+                    <option value="visitor">I visited the website but did not submit a form</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="additionalInfo">Additional Information (optional)</label>
+                <textarea id="additionalInfo" name="additionalInfo" placeholder="Any additional context that may help us locate and process your request..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Opt-Out Request</button>
+
+            <p class="form-note">
+                We will not discriminate against you for exercising your CCPA rights. This form is for California residents only. Residents of other states may have similar rights under applicable state law — contact us at <a href="mailto:privacy@roofingestimatenow.com" style="color:var(--primary);">privacy@roofingestimatenow.com</a> for assistance.
+            </p>
+        </form>
+
+        <div class="success-msg" id="successMsg">
+            &#10003; Your opt-out request has been received. We will process it within 15 business days and send a confirmation to the email address you provided.
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 RoofingEstimateNow.com &nbsp;|&nbsp;
+        <a href="/#privacy-policy">Privacy Policy</a>
+        <a href="/#privacy-policy">Terms of Service</a>
+        <a href="/do-not-sell.html">Do Not Sell My Personal Information</a>
+    </p>
+</footer>
+
+<script>
+    document.getElementById('dnsmiForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var firstName = document.getElementById('firstName').value.trim();
+        var lastName  = document.getElementById('lastName').value.trim();
+        var email     = document.getElementById('email').value.trim();
+        var rel       = document.getElementById('relationship').value;
+
+        if (!firstName || !lastName || !email || !rel) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        // Hide form, show success
+        document.getElementById('dnsmiForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
