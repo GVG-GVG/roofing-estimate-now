@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#1B5E20"/>
+  <!-- Roof -->
+  <polygon points="32,10 8,32 16,32 16,50 48,50 48,32 56,32" fill="white"/>
+  <!-- Door -->
+  <rect x="26" y="34" width="12" height="16" rx="2" fill="#FF6F00"/>
+</svg>
