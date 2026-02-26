@@ -1233,9 +1233,281 @@
     }
 
 
-    // Geo-location: detect visitor's state via IP
+    // Geo-location: detect visitor's state via IP — powers hero text + testimonials
     (function() {
         var geo = document.getElementById('geoLocation');
+        var stateTestimonials = {
+            'California': [
+                { name: 'Carlos Mendez', city: 'Los Angeles', abbr: 'CA', text: 'Wildfires had damaged our roof tiles and I had no idea where to start. Got matched with a contractor who specializes in fire restoration — new roof in under two weeks.' },
+                { name: 'Lisa Tran', city: 'San Jose', abbr: 'CA', text: 'We needed a full tear-off on our 30-year-old ranch home. The contractor they connected us with gave the most competitive bid and finished ahead of schedule.' },
+                { name: 'James O\'Brien', city: 'Sacramento', abbr: 'CA', text: 'Central Valley heat had destroyed our shingles. Submitted my info on a Monday, had three quotes by Wednesday, and a brand new cool roof by the following week.' }
+            ],
+            'Texas': [
+                { name: 'Mike Rodriguez', city: 'Dallas', abbr: 'TX', text: 'Had storm damage after a bad hail season. Got connected with a contractor the next day who handled everything including the insurance claim. Saved me thousands.' },
+                { name: 'Amanda Foster', city: 'Houston', abbr: 'TX', text: 'Hurricane season left us with major leaks. Within 48 hours I had a licensed crew on my roof doing a full replacement. Insurance process was handled for us too.' },
+                { name: 'Robert Chen', city: 'San Antonio', abbr: 'TX', text: 'Texas heat had warped our old shingles badly. Got matched with a local pro who installed impact-resistant shingles at a price way below what I was quoted elsewhere.' }
+            ],
+            'Florida': [
+                { name: 'Maria Santos', city: 'Miami', abbr: 'FL', text: 'After the hurricane our roof was barely holding on. Got connected to a licensed contractor who dealt with our insurance company directly. Whole thing was painless.' },
+                { name: 'Tom Bradley', city: 'Tampa', abbr: 'FL', text: 'Needed a full re-roof to meet new Florida wind code requirements. The contractor they matched me with knew the codes inside and out. Passed inspection first try.' },
+                { name: 'Karen Mitchell', city: 'Orlando', abbr: 'FL', text: 'Had been putting off roof repairs for two years. Submitted my info expecting a hassle and instead got a same-week appointment with a great local company.' }
+            ],
+            'New York': [
+                { name: 'Anthony Russo', city: 'Brooklyn', abbr: 'NY', text: 'Finding a reliable roofer in the city felt impossible until I used this service. Got matched with a crew experienced with flat roofs and brownstones. Done in three days.' },
+                { name: 'Jennifer Kim', city: 'Buffalo', abbr: 'NY', text: 'Lake effect snow had caused ice dam damage across our entire roof. The contractor they found handled the tear-off and insulation upgrade in one shot.' },
+                { name: 'David Morales', city: 'Syracuse', abbr: 'NY', text: 'Our 1920s home needed specialized slate work. They matched us with a contractor who actually knew how to work with historic materials. Impressed.' }
+            ],
+            'Pennsylvania': [
+                { name: 'Brian Kowalski', city: 'Philadelphia', abbr: 'PA', text: 'Row home roof was leaking into the third floor. Got a contractor out within two days who fixed the flashing and membrane. No more buckets in the hallway.' },
+                { name: 'Diane Harper', city: 'Pittsburgh', abbr: 'PA', text: 'Years of freeze-thaw cycles had destroyed our shingles. The roofer they matched us with showed us exactly what needed replacing — no upsell, fair price.' },
+                { name: 'Mark Stephens', city: 'Allentown', abbr: 'PA', text: 'Needed a roof replacement before selling our house. Got it done fast, under budget, and the home inspector had zero issues. Helped us close on time.' }
+            ],
+            'Illinois': [
+                { name: 'Terrence Washington', city: 'Chicago', abbr: 'IL', text: 'Chicago winters are brutal on roofs. Found a contractor through this service who replaced our entire flat roof with a modern membrane system. No more ice dam leaks.' },
+                { name: 'Rachel Novak', city: 'Naperville', abbr: 'IL', text: 'Hail tore up our shingles last spring. Insurance was dragging their feet until the contractor they matched us with stepped in and handled the whole claim.' },
+                { name: 'Kevin Murphy', city: 'Springfield', abbr: 'IL', text: 'Got three quotes within a week. Every contractor was licensed and professional. Went with the mid-range bid and the work was flawless.' }
+            ],
+            'Ohio': [
+                { name: 'Steve Patel', city: 'Columbus', abbr: 'OH', text: 'Our roof was 25 years old and we knew it was time. Got connected with a contractor who gave us an honest assessment and a fair price. New roof looks incredible.' },
+                { name: 'Christine Bailey', city: 'Cleveland', abbr: 'OH', text: 'Lake Erie weather had taken a toll. The roofer they found replaced everything including the gutters. Professional crew, clean job site every day.' },
+                { name: 'Jason Wright', city: 'Cincinnati', abbr: 'OH', text: 'Had a leak that two handymen couldn\'t fix. The roofing pro they connected me with found the real problem in 20 minutes and had it repaired the same day.' }
+            ],
+            'Georgia': [
+                { name: 'Sarah Johnson', city: 'Atlanta', abbr: 'GA', text: 'The whole process took less than a week from submitting my info to having a new roof. The contractor they matched me with was professional, on time, and under budget.' },
+                { name: 'Marcus Brown', city: 'Savannah', abbr: 'GA', text: 'Humidity and storms had rotted some of our decking. The contractor found every problem spot, replaced the wood, and put on a 30-year architectural shingle. Solid work.' },
+                { name: 'Emily Davis', city: 'Augusta', abbr: 'GA', text: 'Needed storm damage repair after a bad spring. Got matched with a roofer who worked directly with my insurance adjuster. Zero out of pocket for me.' }
+            ],
+            'North Carolina': [
+                { name: 'Will Patterson', city: 'Charlotte', abbr: 'NC', text: 'Hail damaged our roof and I had no idea what to do with insurance. The contractor they matched me with walked me through every step of the claims process.' },
+                { name: 'Tammy Brooks', city: 'Raleigh', abbr: 'NC', text: 'We needed a roof that could handle hurricane-force winds. Got connected with a crew that installed wind-rated shingles and reinforced the decking. Peace of mind.' },
+                { name: 'Derek Holmes', city: 'Wilmington', abbr: 'NC', text: 'Coastal weather is hard on roofs. Found a local contractor through this service who specializes in salt air and wind resistance. Five-star experience.' }
+            ],
+            'Michigan': [
+                { name: 'Dan Kowalczyk', city: 'Detroit', abbr: 'MI', text: 'Michigan winters destroy roofs. Got matched with a contractor who tore off the old layer, fixed the decking, and installed ice-and-water shield everywhere it mattered.' },
+                { name: 'Heather Grant', city: 'Grand Rapids', abbr: 'MI', text: 'Ice dams had caused water damage in our attic for two winters straight. The roofer they found addressed the ventilation problem and the shingles. Fixed for good.' },
+                { name: 'Paul Anderson', city: 'Ann Arbor', abbr: 'MI', text: 'Needed a reroof before winter hit. Submitted my info in September and had a brand new roof by mid-October. Tight timeline, but they made it happen.' }
+            ],
+            'New Jersey': [
+                { name: 'Frank Rizzo', city: 'Newark', abbr: 'NJ', text: 'Nor\'easters had beaten up our roof for years. The contractor they matched us with did a complete tear-off and the new roof survived the next big storm without a single leak.' },
+                { name: 'Priya Sharma', city: 'Edison', abbr: 'NJ', text: 'Got three competitive bids within days. Each contractor was licensed and insured. Picked the one with the best warranty and the work exceeded expectations.' },
+                { name: 'Chris DeLuca', city: 'Toms River', abbr: 'NJ', text: 'Sandy damaged our roof years ago and the patch jobs weren\'t holding. Finally got a full replacement through this service. Should have done it sooner.' }
+            ],
+            'Virginia': [
+                { name: 'Robert Taylor', city: 'Virginia Beach', abbr: 'VA', text: 'Coastal storms had loosened shingles across the entire south face. Got matched with a local crew who replaced everything in two days flat. Clean, fast, professional.' },
+                { name: 'Monica Lewis', city: 'Richmond', abbr: 'VA', text: 'Our historic home needed careful work. The contractor they found had experience with older homes and matched the architectural style perfectly. Neighbors noticed.' },
+                { name: 'Tyler Jackson', city: 'Arlington', abbr: 'VA', text: 'Needed a roof replacement on a tight timeline before our home sale closed. Contractor was out in 48 hours and finished in three days. Saved the deal.' }
+            ],
+            'Washington': [
+                { name: 'Eric Lindgren', city: 'Seattle', abbr: 'WA', text: 'Constant rain had finally gotten through our 20-year-old roof. The contractor they matched us with installed a membrane system that handles Pacific Northwest weather perfectly.' },
+                { name: 'Nina Yamamoto', city: 'Tacoma', abbr: 'WA', text: 'Moss and moisture had done a number on our cedar shakes. Got connected with a roofer who replaced them with composite that looks identical but lasts twice as long.' },
+                { name: 'Jake Morrison', city: 'Spokane', abbr: 'WA', text: 'Eastern Washington gets brutal winters and hot summers. Needed something that could handle both extremes. The contractor nailed it — literally and figuratively.' }
+            ],
+            'Arizona': [
+                { name: 'Ray Gutierrez', city: 'Phoenix', abbr: 'AZ', text: 'Desert heat had cracked our tile roof in a dozen places. Got matched with a contractor who specializes in tile — repaired what could be saved, replaced the rest. Looks brand new.' },
+                { name: 'Stephanie Cole', city: 'Tucson', abbr: 'AZ', text: 'Monsoon season exposed a bunch of weak spots we didn\'t know about. The roofer they found did a full inspection and fixed everything before the next storm hit.' },
+                { name: 'Phil Nakamura', city: 'Scottsdale', abbr: 'AZ', text: 'Wanted to upgrade to a cool roof to cut our AC bills. The contractor they connected us with installed reflective coating over our flat roof. Energy bill dropped 20%.' }
+            ],
+            'Massachusetts': [
+                { name: 'Sean Callahan', city: 'Boston', abbr: 'MA', text: 'Ice dams were destroying our triple-decker every winter. The contractor they matched us with fixed the ventilation and insulation along with the shingles. Problem solved.' },
+                { name: 'Linda Chen', city: 'Worcester', abbr: 'MA', text: 'Needed a roof that could handle New England weather. Got connected with a crew that installed architectural shingles with a 50-year warranty. Built to last.' },
+                { name: 'Matt Sullivan', city: 'Springfield', abbr: 'MA', text: 'Old farmhouse needed a complete reroof. The contractor handled the steep pitch and complex dormers like a pro. Clean work, fair price, great communication.' }
+            ],
+            'Tennessee': [
+                { name: 'Darrell Watkins', city: 'Nashville', abbr: 'TN', text: 'Tornado damage tore off half our roof. Got connected with a contractor the same day who tarped it immediately and had us under a new roof within a week.' },
+                { name: 'Megan Price', city: 'Memphis', abbr: 'TN', text: 'Severe storms roll through here every spring. The roofer they matched us with installed impact-resistant shingles and our insurance premium actually dropped.' },
+                { name: 'Brandon Scott', city: 'Knoxville', abbr: 'TN', text: 'Had been getting quotes for months and they were all over the place. This service connected me with a straight-shooter who gave a fair price and delivered quality work.' }
+            ],
+            'Indiana': [
+                { name: 'Ryan Cooper', city: 'Indianapolis', abbr: 'IN', text: 'Spring hail shredded our shingles. The contractor they matched me with handled the insurance claim and got us a full replacement at zero out of pocket. Couldn\'t believe it.' },
+                { name: 'Kathy Weber', city: 'Fort Wayne', abbr: 'IN', text: 'Needed a reroof on a budget. Got three quotes fast and the contractor we chose offered financing that made it affordable. Professional work from start to finish.' },
+                { name: 'Tim Larson', city: 'Evansville', abbr: 'IN', text: 'Ohio River humidity had caused mold under our old shingles. The crew they connected us with replaced the decking and shingles. Attic finally stays dry.' }
+            ],
+            'Missouri': [
+                { name: 'Doug Fischer', city: 'St. Louis', abbr: 'MO', text: 'Hailstorm took out roofs across our whole neighborhood. While everyone else was scrambling, I had a contractor out the next morning through this service. First house on the block done.' },
+                { name: 'Angela Martin', city: 'Kansas City', abbr: 'MO', text: 'Tornado alley weather demands a solid roof. The contractor they found installed wind-rated shingles with reinforced decking. Survived the next big storm no problem.' },
+                { name: 'Sam Richardson', city: 'Springfield', abbr: 'MO', text: 'Roof was 28 years old and insurance was threatening to drop us. Got a full replacement done in three days. Renewed our policy with no issues.' }
+            ],
+            'Maryland': [
+                { name: 'Dave Thomas', city: 'Baltimore', abbr: 'MD', text: 'Row home flat roof was ponding water after every rain. The contractor they matched us with installed proper drainage and a new membrane. No more puddles, no more leaks.' },
+                { name: 'Alicia Freeman', city: 'Silver Spring', abbr: 'MD', text: 'Needed a contractor who could handle our HOA\'s strict requirements. They matched us with someone who knew exactly what materials and colors were approved. Smooth process.' },
+                { name: 'Greg Hoffman', city: 'Annapolis', abbr: 'MD', text: 'Chesapeake Bay moisture had rotted fascia boards and damaged shingles. Contractor replaced everything and added proper ventilation. House looks like new.' }
+            ],
+            'Wisconsin': [
+                { name: 'Jeff Olson', city: 'Milwaukee', abbr: 'WI', text: 'Wisconsin winters are no joke. Got matched with a contractor who installed ice-and-water shield on the entire roof, not just the edges. First winter with zero ice dams.' },
+                { name: 'Sarah Becker', city: 'Madison', abbr: 'WI', text: 'Needed a reroof on our craftsman bungalow. The contractor respected the home\'s character and matched the style perfectly. Neighbors thought it was the original roof.' },
+                { name: 'Pete Jankowski', city: 'Green Bay', abbr: 'WI', text: 'Heavy snow loads had caused sagging. The crew they found reinforced the structure and put on a new roof rated for our snow loads. Rock solid.' }
+            ],
+            'Colorado': [
+                { name: 'David Williams', city: 'Denver', abbr: 'CO', text: 'I was dreading getting quotes because I figured every company would try to upsell me. These folks matched me with honest contractors who gave me real options at fair prices.' },
+                { name: 'Kelly Nguyen', city: 'Colorado Springs', abbr: 'CO', text: 'Hail is a yearly thing here. Got matched with a contractor who installed Class 4 impact-resistant shingles. Insurance gave us a premium discount for upgrading.' },
+                { name: 'Brett Larson', city: 'Fort Collins', abbr: 'CO', text: 'Front Range hail destroyed our roof last June. Contractor handled the entire insurance process. Went from damaged roof to brand new in under two weeks.' }
+            ],
+            'Minnesota': [
+                { name: 'Tom Johansson', city: 'Minneapolis', abbr: 'MN', text: 'Minnesota winters punish roofs. The contractor they matched us with did a full tear-off, replaced rotted decking, and installed proper ice dam protection. Bulletproof now.' },
+                { name: 'Becky Larson', city: 'St. Paul', abbr: 'MN', text: 'Needed a contractor who understood cold-weather roofing. They found one who installed self-adhering underlayment across the entire deck. First worry-free winter in years.' },
+                { name: 'Chris Haugen', city: 'Duluth', abbr: 'MN', text: 'Lake Superior weather is extreme. Got matched with a local crew who knew exactly what materials hold up here. No corners cut. Best roof on the block now.' }
+            ],
+            'South Carolina': [
+                { name: 'DeAndre Moore', city: 'Charleston', abbr: 'SC', text: 'Hurricane damage required a full replacement. The contractor they connected us with was licensed for coastal work and handled the insurance claim. Painless process.' },
+                { name: 'Ashley Turner', city: 'Columbia', abbr: 'SC', text: 'South Carolina heat and humidity had aged our roof fast. Got matched with a crew that installed ventilated ridge caps and reflective shingles. Attic temp dropped 15 degrees.' },
+                { name: 'Rick Barnes', city: 'Greenville', abbr: 'SC', text: 'Storm damage in our neighborhood was widespread. While others waited weeks for estimates, I had a contractor on-site the next day. Huge advantage using this service.' }
+            ],
+            'Alabama': [
+                { name: 'Jamal Henderson', city: 'Birmingham', abbr: 'AL', text: 'Tornado came through and took shingles off the whole back side. Contractor was out the next morning with a tarp, and we had a new roof before the end of the week.' },
+                { name: 'Beth Ann Crawford', city: 'Huntsville', abbr: 'AL', text: 'Alabama storms are relentless. The roofer they matched us with installed wind-rated shingles and reinforced the ridge. First spring without worrying about every thunderstorm.' },
+                { name: 'Wayne Foster', city: 'Mobile', abbr: 'AL', text: 'Gulf Coast humidity had rotted our decking. Contractor replaced all damaged wood and installed a roof system designed for coastal conditions. Should have done this years ago.' }
+            ],
+            'Louisiana': [
+                { name: 'Jerome Baptiste', city: 'New Orleans', abbr: 'LA', text: 'Post-hurricane roof work is hard to get done right. The contractor they matched us with actually showed up when they said they would and did quality work. Rare and appreciated.' },
+                { name: 'Danielle Broussard', city: 'Baton Rouge', abbr: 'LA', text: 'Louisiana heat and rain are brutal on roofs. Got connected with a local pro who knew exactly what materials hold up in this climate. No more annual patch jobs.' },
+                { name: 'Travis Landry', city: 'Lafayette', abbr: 'LA', text: 'Needed a roof that could handle hurricane-force winds. The contractor installed a fortified system that meets IBHS standards. Insurance discount paid for half the upgrade.' }
+            ],
+            'Kentucky': [
+                { name: 'Bobby Gibson', city: 'Louisville', abbr: 'KY', text: 'Spring storms took out our roof and two trees. The contractor they matched us with coordinated tree removal and roof replacement together. Efficient and affordable.' },
+                { name: 'Sandra Wells', city: 'Lexington', abbr: 'KY', text: 'Ice storms had caused leaks we didn\'t even know about until ceiling stains appeared. Contractor found all the damage and fixed everything. Thorough and honest work.' },
+                { name: 'Dale Combs', city: 'Bowling Green', abbr: 'KY', text: 'Tornado alley living means your roof takes a beating. Got matched with a contractor who installed impact-resistant shingles rated for our wind zone. Smart investment.' }
+            ],
+            'Oregon': [
+                { name: 'Mike Bergstrom', city: 'Portland', abbr: 'OR', text: 'Constant Pacific Northwest rain had finally gotten through our moss-covered roof. Contractor did a full tear-off, treated the decking, and installed a 50-year shingle. Done right.' },
+                { name: 'Amy Sato', city: 'Eugene', abbr: 'OR', text: 'Our cedar shake roof was past its prime. Got matched with a crew that replaced it with composite shakes that look identical but handle the rain so much better.' },
+                { name: 'Dale Wheeler', city: 'Bend', abbr: 'OR', text: 'High desert climate means snow, sun, and wind. The contractor they found installed a roof system that handles all three. Two years in, not a single issue.' }
+            ],
+            'Oklahoma': [
+                { name: 'Travis McKinney', city: 'Oklahoma City', abbr: 'OK', text: 'Tornado season took half our shingles off. Got matched with a contractor who had my insurance claim processed and new roof installed in under 10 days. Incredible turnaround.' },
+                { name: 'Christy Pearson', city: 'Tulsa', abbr: 'OK', text: 'Oklahoma hail is the worst. The contractor they connected me with installed SBS modified shingles that flex instead of crack. Survived the very next hailstorm.' },
+                { name: 'Dustin Reeves', city: 'Norman', abbr: 'OK', text: 'Fifth roof claim in eight years — that\'s Oklahoma for you. This time the contractor upgraded us to impact-resistant Class 4 shingles. Insurance dropped our premium 28%.' }
+            ],
+            'Connecticut': [
+                { name: 'Mike Flanagan', city: 'Hartford', abbr: 'CT', text: 'New England nor\'easters had loosened our ridge caps and blown off shingles. The contractor they matched us with did a full reroof in three days. Solid craftsmanship.' },
+                { name: 'Yuki Watanabe', city: 'Stamford', abbr: 'CT', text: 'Expensive area, so I expected to overpay. Actually got a competitive bid from a licensed contractor through this service. Fair price, premium materials, excellent work.' },
+                { name: 'Tony Bianchi', city: 'New Haven', abbr: 'CT', text: 'Ice dams were our annual nightmare. The contractor they found addressed ventilation, insulation, and shingles as a system. First winter without a single ice dam.' }
+            ],
+            'Utah': [
+                { name: 'Brett Jensen', city: 'Salt Lake City', abbr: 'UT', text: 'Heavy snow loads and rapid temperature swings are rough on roofs. The contractor they matched us with installed a system designed specifically for mountain climate. Bomb-proof.' },
+                { name: 'Lindsey Park', city: 'Provo', abbr: 'UT', text: 'Needed a reroof before winter. Submitted my info in September, had quotes in two days, and a brand new roof by the first week of October. Perfect timing.' },
+                { name: 'Shane Willard', city: 'Ogden', abbr: 'UT', text: 'Utah sun and snow are a brutal combo. Contractor installed a reflective shingle that handles UV and a proper ice barrier. Energy bills down, no more ice dam worries.' }
+            ],
+            'Iowa': [
+                { name: 'Craig Sorensen', city: 'Des Moines', abbr: 'IA', text: 'Derecho blew through and damaged half the roofs in town. While neighbors waited months for contractors, I had mine done in two weeks through this service.' },
+                { name: 'Janet Yoder', city: 'Cedar Rapids', abbr: 'IA', text: 'Iowa weather is unpredictable — hail, wind, ice, heat. The contractor they found installed a roof system built for all of it. Two years in and it still looks brand new.' },
+                { name: 'Brian Keller', city: 'Davenport', abbr: 'IA', text: 'Straight-line winds peeled back our shingles. Contractor handled the insurance paperwork, got the claim approved, and had us under a new roof fast. Stress-free.' }
+            ],
+            'Nevada': [
+                { name: 'Victor Reyes', city: 'Las Vegas', abbr: 'NV', text: 'Desert sun had baked our shingles to the point of crumbling. The contractor they matched us with installed a cool roof system. House stays cooler and the AC works less.' },
+                { name: 'Kim Foster', city: 'Henderson', abbr: 'NV', text: 'Flat roof on our commercial property was failing. Got connected with a contractor who installed a TPO membrane that handles 115-degree summers. Zero leaks since.' },
+                { name: 'Jack Porter', city: 'Reno', abbr: 'NV', text: 'Northern Nevada gets actual winters — something people forget. Needed a roof that handles snow and desert sun. Contractor nailed the material choice. Perfect for our climate.' }
+            ],
+            'Arkansas': [
+                { name: 'Billy Ray Cox', city: 'Little Rock', abbr: 'AR', text: 'Tornado season left us with a huge mess. Contractor was on-site within 24 hours, tarped the damage, and had a new roof on in five days. Lifesaver.' },
+                { name: 'Natalie Pierce', city: 'Fayetteville', abbr: 'AR', text: 'Ozark weather swings from ice storms to summer heat. The contractor they found installed shingles rated for both extremes. First year without seasonal roof anxiety.' },
+                { name: 'Joe Bennett', city: 'Fort Smith', abbr: 'AR', text: 'Insurance was trying to lowball our hail claim. The contractor they matched us with supplemented the claim with proper documentation. Got the full replacement covered.' }
+            ],
+            'Mississippi': [
+                { name: 'Darius Coleman', city: 'Jackson', abbr: 'MS', text: 'Mississippi storms don\'t play around. The contractor they connected me with installed a fortified roof system that brought our insurance premium down significantly.' },
+                { name: 'Linda McAllister', city: 'Gulfport', abbr: 'MS', text: 'Gulf Coast living means hurricane prep is everything. Got matched with a contractor who installed wind-rated shingles and hurricane straps. Peace of mind you can\'t put a price on.' },
+                { name: 'Tony Washington', city: 'Hattiesburg', abbr: 'MS', text: 'Had a roof leak that three different handymen couldn\'t find. The roofing pro they matched me with found it in 15 minutes. Proper fix, fair price, done right.' }
+            ],
+            'Kansas': [
+                { name: 'Derek Schultz', city: 'Wichita', abbr: 'KS', text: 'Kansas hail destroyed our roof for the third time. The contractor they connected us with installed impact-resistant shingles. Survived the next season with zero damage.' },
+                { name: 'Melissa Hart', city: 'Overland Park', abbr: 'KS', text: 'Needed a roof replacement and was overwhelmed by the options. This service matched me with a contractor who explained everything clearly and gave a fair, honest price.' },
+                { name: 'Roger Brandt', city: 'Topeka', abbr: 'KS', text: 'Straight-line winds ripped shingles clean off. Insurance claim was filed and contractor was working on the roof within a week. Fastest major repair I\'ve ever experienced.' }
+            ],
+            'New Mexico': [
+                { name: 'Carlos Vigil', city: 'Albuquerque', abbr: 'NM', text: 'Desert sun and monsoon rains are a tough combination. The contractor they matched us with installed a flat roof membrane that handles both extremes. No more seasonal leaks.' },
+                { name: 'Diane Begay', city: 'Santa Fe', abbr: 'NM', text: 'Adobe-style homes need specialized roofing knowledge. They connected us with a contractor who understands parapet walls and proper drainage. True local expertise.' },
+                { name: 'Matt Herrera', city: 'Las Cruces', abbr: 'NM', text: 'UV exposure had destroyed our shingles in just 15 years. The contractor installed a reflective roof coating that cut our cooling costs and should last decades.' }
+            ],
+            'Nebraska': [
+                { name: 'Kyle Johannsen', city: 'Omaha', abbr: 'NE', text: 'Nebraska hail is relentless. The contractor they matched us with walked our roof with the insurance adjuster and got every bit of damage documented. Full replacement covered.' },
+                { name: 'Amy Koehler', city: 'Lincoln', abbr: 'NE', text: 'Needed a roof before winter and every contractor in town was booked. This service connected me with a licensed crew from a neighboring county who had availability. Done in four days.' },
+                { name: 'Rod Swanson', city: 'Grand Island', abbr: 'NE', text: 'Tornado-strength winds blew off our ridge cap and half the north-facing shingles. Contractor had us tarped same day and under a new roof by end of week.' }
+            ],
+            'Idaho': [
+                { name: 'Brent Larsen', city: 'Boise', abbr: 'ID', text: 'Treasure Valley summers are scorching and winters are cold. The contractor they found installed a versatile shingle system that performs in both extremes. Nailed it.' },
+                { name: 'Wendy Hall', city: 'Idaho Falls', abbr: 'ID', text: 'Heavy snow loads are a real concern here. Got matched with a contractor who reinforced our roof structure and installed proper snow guards. Built for Idaho winters.' },
+                { name: 'Tom Rasmussen', city: 'Coeur d\'Alene', abbr: 'ID', text: 'Mountain weather is hard on roofs. The contractor they matched us with had experience with steep pitches and ice management. Work was top quality.' }
+            ],
+            'West Virginia': [
+                { name: 'Earl Hensley', city: 'Charleston', abbr: 'WV', text: 'Mountain rain and wind had worn through our old roof. The contractor they matched us with did a full replacement including all the flashing. First dry winter in years.' },
+                { name: 'Patty Mullins', city: 'Morgantown', abbr: 'WV', text: 'West Virginia weather throws everything at you. Got connected with a roofer who installed a system rated for high wind and heavy snow. Confidence through every season now.' },
+                { name: 'Randy Bias', city: 'Huntington', abbr: 'WV', text: 'Needed a roof replacement on our older home in a tough-access area. The contractor they found brought the right equipment and crew size. No excuses, just got it done.' }
+            ],
+            'Hawaii': [
+                { name: 'Keoni Akana', city: 'Honolulu', abbr: 'HI', text: 'Salt air and trade winds wear roofs down fast here. Got matched with a local contractor who uses marine-grade materials. Three years in and it still looks brand new.' },
+                { name: 'Lisa Tanaka', city: 'Kailua', abbr: 'HI', text: 'Finding a reliable roofer on the island used to mean months of waiting. This service connected us with a licensed crew who started within a week. Game changer.' },
+                { name: 'Mike Fernandez', city: 'Maui', abbr: 'HI', text: 'Hurricane season is stressful with an old roof. The contractor they found reinforced our structure and installed rated shingles. Finally feel prepared for whatever comes.' }
+            ],
+            'New Hampshire': [
+                { name: 'Dave Thibodeau', city: 'Manchester', abbr: 'NH', text: 'New Hampshire winters test every roof. The contractor they matched us with installed ice dam protection across every eave and valley. First leak-free winter in five years.' },
+                { name: 'Karen Pratt', city: 'Nashua', abbr: 'NH', text: 'Our colonial home needed a roof that respected its character. The contractor matched architectural shingles to the period style. Beautiful work that protects and looks right.' },
+                { name: 'Jim Bouchard', city: 'Concord', abbr: 'NH', text: 'Heavy snow collapsed part of our garage roof. The contractor they found reinforced the structure and installed a steeper pitch to shed snow. Problem permanently solved.' }
+            ],
+            'Maine': [
+                { name: 'Scott Pelletier', city: 'Portland', abbr: 'ME', text: 'Maine nor\'easters are relentless. The contractor they matched us with installed a full ice-and-water barrier underlayment — not just at the eaves, everywhere. Built for our climate.' },
+                { name: 'Anne Michaud', city: 'Bangor', abbr: 'ME', text: 'Snow loads and ice dams were annual headaches. The roofer they found fixed the ventilation and insulation first, then did the shingles. Solved the root cause, not just the symptom.' },
+                { name: 'Rick Caron', city: 'Lewiston', abbr: 'ME', text: 'Older New England home with a complicated roofline. The contractor they connected us with handled every valley, dormer, and chimney flashing properly. Meticulous work.' }
+            ],
+            'Montana': [
+                { name: 'Jake Gustafson', city: 'Billings', abbr: 'MT', text: 'Montana wind and hail took out our roof last summer. Contractor was up on the roof with the adjuster, documented everything, and got us a full replacement. Zero hassle.' },
+                { name: 'Carla Whitfield', city: 'Missoula', abbr: 'MT', text: 'Mountain snow loads are serious here. The contractor they matched us with installed structural reinforcement and proper snow guards. Roof doesn\'t even flinch in heavy snowfall now.' },
+                { name: 'Troy Nelsen', city: 'Great Falls', abbr: 'MT', text: 'Wind is constant in Great Falls. The roofer they found used six-nail pattern and wind-rated shingles. First roof we\'ve had that doesn\'t lose shingles every spring.' }
+            ],
+            'Rhode Island': [
+                { name: 'Paul Marchand', city: 'Providence', abbr: 'RI', text: 'Coastal storms and old housing stock make roofing tricky here. The contractor they matched us with knew exactly how to handle our 1940s Cape Cod. Proper flashing, proper materials.' },
+                { name: 'Maria Correia', city: 'Warwick', abbr: 'RI', text: 'Ice dams every single winter. The contractor fixed the attic insulation and ventilation first, then did the reroof. First winter with dry ceilings. Worth every penny.' },
+                { name: 'Tony Ricci', city: 'Cranston', abbr: 'RI', text: 'Nor\'easter blew off a section of our roof. Contractor tarped it same day, insurance claim filed by end of week, new roof done the following week. Textbook response.' }
+            ],
+            'Delaware': [
+                { name: 'Chuck Mason', city: 'Wilmington', abbr: 'DE', text: 'Mid-Atlantic storms had caused leaks we kept patching. Finally got a full replacement through this service. Contractor found damage we didn\'t even know about. Glad we did it right.' },
+                { name: 'Janet Patel', city: 'Dover', abbr: 'DE', text: 'Delaware humidity causes mold problems under old roofs. The contractor they matched us with replaced the decking and added proper ventilation. Attic is dry for the first time.' },
+                { name: 'Bill Owens', city: 'Newark', abbr: 'DE', text: 'Needed a fast turnaround before our home inspection. Contractor had the roof done in two days. Inspector had zero roofing issues. Clean, efficient work.' }
+            ],
+            'South Dakota': [
+                { name: 'Lance Dekker', city: 'Sioux Falls', abbr: 'SD', text: 'South Dakota hail is brutal — baseball-sized stones are a real thing here. The contractor they matched us with installed impact-rated shingles. Survived the next storm untouched.' },
+                { name: 'Paula Engel', city: 'Rapid City', abbr: 'SD', text: 'Black Hills weather changes fast. Got connected with a local contractor who understood the unique wind patterns here. Installed a roof that handles anything Mother Nature throws at us.' },
+                { name: 'Kirk Thorson', city: 'Aberdeen', abbr: 'SD', text: 'Straight-line winds ripped shingles off three sides. Contractor had the insurance supplement approved and full replacement done before the next storm season. Excellent work.' }
+            ],
+            'North Dakota': [
+                { name: 'Lars Bjornson', city: 'Fargo', abbr: 'ND', text: 'North Dakota winters are no joke. The contractor they matched us with installed a cold-climate system with full ice barrier and proper attic ventilation. Roof is bulletproof now.' },
+                { name: 'Michelle Haugen', city: 'Bismarck', abbr: 'ND', text: 'Wind speeds here rival anything in tornado alley. Got connected with a contractor who installed six-nail pattern with wind-rated ridge caps. First roof to survive a full year intact.' },
+                { name: 'Tyler Strand', city: 'Grand Forks', abbr: 'ND', text: 'Summer hail followed by -30 winters. The contractor found through this service installed a system engineered for extreme temperature swings. Holding up perfectly two years in.' }
+            ],
+            'Alaska': [
+                { name: 'Erik Halvorsen', city: 'Anchorage', abbr: 'AK', text: 'Alaska roofing is specialized work. The contractor they matched us with understood snow loads, permafrost issues, and proper ice dam prevention. True expertise for our climate.' },
+                { name: 'Denise Kowalski', city: 'Fairbanks', abbr: 'AK', text: 'At -40 degrees, your roof better be right. The contractor they connected us with installed arctic-grade materials and made sure the attic ventilation was perfect. No issues through the coldest winter on record.' },
+                { name: 'John Kvasnikoff', city: 'Juneau', abbr: 'AK', text: 'Southeast Alaska rain is relentless. Got matched with a local roofer who installed a standing seam metal roof. Sheds water and snow perfectly. Best upgrade we\'ve made to this house.' }
+            ],
+            'Vermont': [
+                { name: 'Doug Lafleur', city: 'Burlington', abbr: 'VT', text: 'Vermont winters destroyed our 25-year-old roof. The contractor they matched us with did a complete tear-off and installed a system with full ice-and-water shield. First dry spring in ages.' },
+                { name: 'Nancy Foster', city: 'Montpelier', abbr: 'VT', text: 'Historic farmhouse needed careful roofing work. The contractor respected the building\'s character and used materials that look period-appropriate while performing like modern tech.' },
+                { name: 'Ben Harper', city: 'Rutland', abbr: 'VT', text: 'Snow, ice, freeze-thaw — Vermont throws it all at your roof. The contractor they found installed proper ventilation and insulation as part of the reroof. Should have done this years ago.' }
+            ],
+            'Wyoming': [
+                { name: 'Cody Rankin', city: 'Cheyenne', abbr: 'WY', text: 'Wyoming wind is constant and ferocious. The contractor they matched us with used a high-wind installation method that\'s held through multiple 70mph gusts. Finally a roof that stays put.' },
+                { name: 'Jill Bradshaw', city: 'Casper', abbr: 'WY', text: 'Hail and wind in the same storm is typical here. Got connected with a contractor who installed impact-resistant, wind-rated shingles. Insurance gave us a discount for the upgrade.' },
+                { name: 'Walt Schuster', city: 'Jackson', abbr: 'WY', text: 'Teton County snow loads require serious roofing. The contractor they found reinforced the structure and installed a metal roof that sheds snow safely. Built for mountain living.' }
+            ]
+        };
+
+        var starSVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+
+        function renderTestimonials(reviews) {
+            var grid = document.querySelector('.testimonials-grid');
+            if (!grid || !reviews) return;
+            var html = '';
+            reviews.forEach(function(r) {
+                var initials = r.name.split(' ').map(function(n) { return n[0]; }).join('');
+                html += '<div class="testimonial-card fade-up">' +
+                    '<div class="testimonial-stars">' + starSVG + starSVG + starSVG + starSVG + starSVG + '</div>' +
+                    '<p class="testimonial-text">"' + r.text + '"</p>' +
+                    '<div class="testimonial-author">' +
+                    '<div class="testimonial-avatar">' + initials + '</div>' +
+                    '<div><div class="testimonial-name">' + r.name + '</div>' +
+                    '<div class="testimonial-location">' + r.city + ', ' + r.abbr + '</div></div></div></div>';
+            });
+            grid.innerHTML = html;
+        }
+
         var controller = new AbortController();
         var timeoutId = setTimeout(function() { controller.abort(); }, 3000);
         fetch('https://ipapi.co/json/', { signal: controller.signal })
@@ -1244,6 +1516,9 @@
                 clearTimeout(timeoutId);
                 if (data && data.region && data.country_code === 'US') {
                     geo.textContent = data.region + ' ';
+                    if (stateTestimonials[data.region]) {
+                        renderTestimonials(stateTestimonials[data.region]);
+                    }
                 }
             })
             .catch(function() { clearTimeout(timeoutId); });
