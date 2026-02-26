@@ -1044,12 +1044,12 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </div>
-                <p class="testimonial-text">"The whole process took less than a week from submitting my info to having a new roof. The contractor they matched me with was professional, on time, and under budget."</p>
+                <p class="testimonial-text">"Hurricane season left us with major leaks. Within 48 hours I had a licensed crew on my roof doing a full replacement. Insurance process was handled for us too."</p>
                 <div class="testimonial-author">
-                    <div class="testimonial-avatar">SJ</div>
+                    <div class="testimonial-avatar">AF</div>
                     <div>
-                        <div class="testimonial-name">Sarah Johnson</div>
-                        <div class="testimonial-location">Atlanta, GA</div>
+                        <div class="testimonial-name">Amanda Foster</div>
+                        <div class="testimonial-location">Houston, TX</div>
                     </div>
                 </div>
             </div>
@@ -1061,12 +1061,12 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </div>
-                <p class="testimonial-text">"I was dreading getting quotes because I figured every company would try to upsell me. These folks matched me with honest contractors who gave me real options at fair prices."</p>
+                <p class="testimonial-text">"Texas heat had warped our old shingles badly. Got matched with a local pro who installed impact-resistant shingles at a price way below what I was quoted elsewhere."</p>
                 <div class="testimonial-author">
-                    <div class="testimonial-avatar">DW</div>
+                    <div class="testimonial-avatar">RC</div>
                     <div>
-                        <div class="testimonial-name">David Williams</div>
-                        <div class="testimonial-location">Denver, CO</div>
+                        <div class="testimonial-name">Robert Chen</div>
+                        <div class="testimonial-location">San Antonio, TX</div>
                     </div>
                 </div>
             </div>
@@ -1512,6 +1512,24 @@
             }
         }
 
+        function applyGeo(region) {
+            geo.textContent = region + ' ';
+            if (stateTestimonials[region]) {
+                renderTestimonials(stateTestimonials[region]);
+            }
+        }
+
+        function tryFallbackGeo() {
+            fetch('https://ip-api.com/json/?fields=status,country,regionName', { mode: 'cors' })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data && data.status === 'success' && data.country === 'United States' && data.regionName) {
+                        applyGeo(data.regionName);
+                    }
+                })
+                .catch(function() {});
+        }
+
         var controller = new AbortController();
         var timeoutId = setTimeout(function() { controller.abort(); }, 3000);
         fetch('https://ipapi.co/json/', { signal: controller.signal })
@@ -1519,13 +1537,12 @@
             .then(function(data) {
                 clearTimeout(timeoutId);
                 if (data && data.region && data.country_code === 'US') {
-                    geo.textContent = data.region + ' ';
-                    if (stateTestimonials[data.region]) {
-                        renderTestimonials(stateTestimonials[data.region]);
-                    }
+                    applyGeo(data.region);
+                } else {
+                    tryFallbackGeo();
                 }
             })
-            .catch(function() { clearTimeout(timeoutId); });
+            .catch(function() { clearTimeout(timeoutId); tryFallbackGeo(); });
     })();
 
     // Phone input formatting
