@@ -1200,7 +1200,7 @@
     });
 
     // Scroll-triggered animations
-    const observer = new IntersectionObserver((entries) => {
+    window._fadeObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
@@ -1208,7 +1208,7 @@
         });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    document.querySelectorAll('.fade-up').forEach(el => window._fadeObserver.observe(el));
 
     // Form submission
     function handleSubmit(e) {
@@ -1506,6 +1506,10 @@
                     '<div class="testimonial-location">' + r.city + ', ' + r.abbr + '</div></div></div></div>';
             });
             grid.innerHTML = html;
+            // Re-observe new cards for fade-in animation
+            if (window._fadeObserver) {
+                grid.querySelectorAll('.fade-up').forEach(function(el) { window._fadeObserver.observe(el); });
+            }
         }
 
         var controller = new AbortController();
