@@ -268,7 +268,22 @@
             font-size: 14px;
             color: var(--gray-500);
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+        }
+        .form-trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .form-trust-badges span {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(27, 94, 32, 0.08);
+            padding: 4px 10px;
+            border-radius: 50px;
+            white-space: nowrap;
         }
         .form-group {
             margin-bottom: 14px;
@@ -348,11 +363,45 @@
             box-shadow: 0 6px 20px rgba(255, 111, 0, 0.45);
         }
         .tcpa-disclosure {
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 10px;
+            line-height: 1.4;
             color: var(--gray-500);
-            margin-top: 12px;
+            margin-top: 8px;
+            margin-bottom: 8px;
             text-align: left;
+        }
+        .form-trust-micro {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .form-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .form-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .form-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .form-progress-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-500);
+            white-space: nowrap;
         }
         .form-trust {
             display: flex;
@@ -632,6 +681,38 @@
         }
 
         /* ============ LEGAL / PRIVACY POLICY ============ */
+        /* ============ STICKY MOBILE CTA ============ */
+        .sticky-mobile-cta {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            padding: 12px 16px;
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+        .sticky-mobile-cta a {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(255, 111, 0, 0.35);
+        }
+        @media (max-width: 768px) {
+            .sticky-mobile-cta { display: block; }
+            body { padding-bottom: 72px; }
+        }
+
         /* ============ FOOTER ============ */
         .footer {
             background: var(--dark);
@@ -688,10 +769,13 @@
         }
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .mobile-toggle { display: block; }
-            .hero { padding: 100px 0 60px; min-height: auto; }
-            .hero-stats { gap: 24px; }
-            .hero-stat-value { font-size: 24px; }
+            .mobile-toggle { display: none; }
+            .hero { padding: 80px 0 40px; min-height: auto; }
+            .hero-content h1 { font-size: 28px; margin-bottom: 12px; }
+            .hero-content p { font-size: 15px; margin-bottom: 16px; }
+            .hero-badges { margin-bottom: 16px; }
+            .hero-stats { display: none; }
+            .lead-form-card { padding: 24px 20px; }
             .services-grid { grid-template-columns: 1fr; }
             .steps-grid { grid-template-columns: 1fr; gap: 40px; }
             .testimonials-grid { grid-template-columns: 1fr; }
@@ -783,7 +867,16 @@
             <div class="lead-form-card" id="lead-form">
                 <h2>Get Your Free Estimate</h2>
                 <p class="form-sub">Takes less than 60 seconds</p>
+                <div class="form-trust-badges">
+                    <span>100% Free</span>
+                    <span>No Obligation</span>
+                    <span>Licensed Pros</span>
+                </div>
                 <form id="roofingForm" onsubmit="handleSubmit(event)">
+                    <div class="form-progress">
+                        <div class="form-progress-bar"><div class="form-progress-fill" id="progressFill"></div></div>
+                        <span class="form-progress-text" id="progressText">0 of 7</span>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First Name</label>
@@ -802,23 +895,9 @@
                         <label for="phone">Phone</label>
                         <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" required>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="zip">Zip Code</label>
-                            <input type="text" id="zip" name="zip" placeholder="12345" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="projectType">Project Type</label>
-                            <select id="projectType" name="projectType" required>
-                                <option value="" disabled selected>Select...</option>
-                                <option value="repair">Roof Repair</option>
-                                <option value="replacement">Full Replacement</option>
-                                <option value="inspection">Inspection</option>
-                                <option value="storm">Storm Damage</option>
-                                <option value="new">New Construction</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="zip">Zip Code</label>
+                        <input type="text" id="zip" name="zip" placeholder="12345" required>
                     </div>
                     <div class="form-group">
                         <label for="homeowner">Are you the home owner?</label>
@@ -839,8 +918,11 @@
                             <option value="not-sure">Not Sure</option>
                         </select>
                     </div>
+                    <p class="tcpa-disclosure">By clicking "Get My Free Estimate," you consent to being contacted by roofingestimatenow.com and partners via calls, texts, and email at the number provided, including autodialed calls, even if on a Do Not Call list. Msg &amp; data rates may apply. Consent not required to purchase. Reply STOP to opt out.</p>
                     <button type="submit" class="form-submit">Get My Free Estimate</button>
-                    <p class="tcpa-disclosure">By clicking "Get My Free Estimate," I provide express written consent for roofingestimatenow.com and its marketing partners to contact me about home improvement offers by phone call, email, and text message at the number and email I provided, even if my number is a mobile number or is listed on any state, federal, or corporate Do Not Call list. I understand calls and texts may be sent using an automatic dialing system or prerecorded voice. Message and data rates may apply. Consent is not a condition of purchase. Reply STOP to opt out.</p>
+                    <div class="form-trust-micro">
+                        <span>Trusted by 15,000+ homeowners</span>
+                    </div>
                     <div class="form-trust">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                         Your info is secure. No spam, ever.
@@ -1180,6 +1262,29 @@
         }, 1500);
     }
 
+    // Form progress tracking
+    (function() {
+        var form = document.getElementById('roofingForm');
+        var fill = document.getElementById('progressFill');
+        var text = document.getElementById('progressText');
+        var total = 7;
+        function updateProgress() {
+            var filled = 0;
+            var fn = form.querySelector('#firstName'); if (fn && fn.value.trim()) filled++;
+            var ln = form.querySelector('#lastName'); if (ln && ln.value.trim()) filled++;
+            var em = form.querySelector('#email'); if (em && em.value.trim()) filled++;
+            var ph = form.querySelector('#phone'); if (ph && ph.value.trim()) filled++;
+            var zp = form.querySelector('#zip'); if (zp && zp.value.trim()) filled++;
+            var ho = form.querySelector('input[name="homeowner"]:checked'); if (ho) filled++;
+            var rt = form.querySelector('#roofType'); if (rt && rt.value) filled++;
+            var pct = Math.round((filled / total) * 100);
+            fill.style.width = pct + '%';
+            text.textContent = filled + ' of ' + total;
+        }
+        form.addEventListener('input', updateProgress);
+        form.addEventListener('change', updateProgress);
+    })();
+
     // Phone input formatting
     document.getElementById('phone').addEventListener('input', function(e) {
         let x = e.target.value.replace(/\D/g, '').substring(0, 10);
@@ -1190,6 +1295,11 @@
         e.target.value = formatted;
     });
 </script>
+
+<!-- STICKY MOBILE CTA -->
+<div class="sticky-mobile-cta">
+    <a href="#get-estimate">Get Estimate</a>
+</div>
 
 </body>
 </html>
