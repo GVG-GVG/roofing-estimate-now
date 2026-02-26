@@ -377,32 +377,6 @@
             font-weight: 600;
             color: var(--primary);
         }
-        .form-progress {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-        .form-progress-bar {
-            flex: 1;
-            height: 4px;
-            background: var(--gray-200);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .form-progress-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--primary);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        .form-progress-text {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--gray-500);
-            white-space: nowrap;
-        }
         .form-trust {
             display: flex;
             align-items: center;
@@ -873,10 +847,6 @@
                     <span>Licensed Pros</span>
                 </div>
                 <form id="roofingForm" onsubmit="handleSubmit(event)">
-                    <div class="form-progress">
-                        <div class="form-progress-bar"><div class="form-progress-fill" id="progressFill"></div></div>
-                        <span class="form-progress-text" id="progressText">0 of 7</span>
-                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First Name</label>
@@ -1262,28 +1232,6 @@
         }, 1500);
     }
 
-    // Form progress tracking
-    (function() {
-        var form = document.getElementById('roofingForm');
-        var fill = document.getElementById('progressFill');
-        var text = document.getElementById('progressText');
-        var total = 7;
-        function updateProgress() {
-            var filled = 0;
-            var fn = form.querySelector('#firstName'); if (fn && fn.value.trim()) filled++;
-            var ln = form.querySelector('#lastName'); if (ln && ln.value.trim()) filled++;
-            var em = form.querySelector('#email'); if (em && em.value.trim()) filled++;
-            var ph = form.querySelector('#phone'); if (ph && ph.value.trim()) filled++;
-            var zp = form.querySelector('#zip'); if (zp && zp.value.trim()) filled++;
-            var ho = form.querySelector('input[name="homeowner"]:checked'); if (ho) filled++;
-            var rt = form.querySelector('#roofType'); if (rt && rt.value) filled++;
-            var pct = Math.round((filled / total) * 100);
-            fill.style.width = pct + '%';
-            text.textContent = filled + ' of ' + total;
-        }
-        form.addEventListener('input', updateProgress);
-        form.addEventListener('change', updateProgress);
-    })();
 
     // Phone input formatting
     document.getElementById('phone').addEventListener('input', function(e) {
