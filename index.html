@@ -819,8 +819,8 @@
                         4.9 Star Rating
                     </div>
                 </div>
-                <h1>Your Roof.<br>Our <span class="highlight">Expertise.</span><br>Zero Cost Estimates.</h1>
-                <p>Get a no-obligation roofing estimate from vetted, local contractors <span id="geoLocation">in your area</span>. Storm damage, leaks, full replacements — we connect you with the right pros fast.</p>
+                <h1>Your <span id="geoLocation"></span>Roof.<br>Our <span class="highlight">Expertise.</span><br>Zero Cost Estimates.</h1>
+                <p>Get a no-obligation roofing estimate from vetted, local contractors in your area. Storm damage, leaks, full replacements — we connect you with the right pros fast.</p>
                 <div class="hero-stats">
                     <div>
                         <div class="hero-stat-value">15,000+</div>
@@ -1243,7 +1243,7 @@
             .then(function(data) {
                 clearTimeout(timeoutId);
                 if (data && data.region && data.country_code === 'US') {
-                    geo.textContent = 'in ' + data.region;
+                    geo.textContent = data.region + ' ';
                 }
             })
             .catch(function() { clearTimeout(timeoutId); });
