@@ -1513,36 +1513,75 @@
         }
 
         function applyGeo(region) {
+            if (!region) return;
             geo.textContent = region + ' ';
             if (stateTestimonials[region]) {
                 renderTestimonials(stateTestimonials[region]);
             }
         }
 
-        function tryFallbackGeo() {
-            fetch('https://ip-api.com/json/?fields=status,country,regionName', { mode: 'cors' })
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    if (data && data.status === 'success' && data.country === 'United States' && data.regionName) {
-                        applyGeo(data.regionName);
-                    }
-                })
-                .catch(function() {});
+        // 6 geo APIs — each visit picks a random one; if it fails, tries another
+        var geoAPIs = [
+            {
+                url: 'https://ipapi.co/json/',
+                parse: function(d) { return (d && d.country_code === 'US') ? d.region : null; }
+            },
+            {
+                url: 'https://ipinfo.io/json',
+                parse: function(d) { return (d && d.country === 'US') ? d.region : null; }
+            },
+            {
+                url: 'https://api.db-ip.com/v2/free/self',
+                parse: function(d) { return (d && d.countryCode === 'US') ? d.stateProv : null; }
+            },
+            {
+                url: 'https://get.geojs.io/v1/ip/geo.json',
+                parse: function(d) { return (d && d.country_code === 'US') ? d.region : null; }
+            },
+            {
+                url: 'https://api.ipapi.is/',
+                parse: function(d) { return (d && d.location && d.location.country_code === 'US') ? d.location.state : null; }
+            },
+            {
+                url: 'https://www.iplocate.io/api/lookup',
+                parse: function(d) { return (d && d.country_code === 'US') ? d.subdivision : null; }
+            }
+        ];
+
+        // Fisher-Yates shuffle
+        function shuffle(arr) {
+            var a = arr.slice();
+            for (var i = a.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = a[i]; a[i] = a[j]; a[j] = t;
+            }
+            return a;
         }
 
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 3000);
-        fetch('https://ipapi.co/json/', { signal: controller.signal })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                clearTimeout(timeoutId);
-                if (data && data.region && data.country_code === 'US') {
-                    applyGeo(data.region);
-                } else {
-                    tryFallbackGeo();
-                }
-            })
-            .catch(function() { clearTimeout(timeoutId); tryFallbackGeo(); });
+        function tryGeo(queue) {
+            if (queue.length === 0) return;
+            var api = queue.shift();
+            var ctrl = new AbortController();
+            var tid = setTimeout(function() { ctrl.abort(); }, 3000);
+            fetch(api.url, { signal: ctrl.signal })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    clearTimeout(tid);
+                    var region = api.parse(data);
+                    if (region) {
+                        applyGeo(region);
+                    } else {
+                        tryGeo(queue);
+                    }
+                })
+                .catch(function() {
+                    clearTimeout(tid);
+                    tryGeo(queue);
+                });
+        }
+
+        // Shuffle all 6, try first; on fail try second; etc.
+        tryGeo(shuffle(geoAPIs));
     })();
 
     // Phone input formatting
