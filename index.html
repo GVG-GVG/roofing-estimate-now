@@ -820,7 +820,7 @@
                     </div>
                 </div>
                 <h1>Your Roof.<br>Our <span class="highlight">Expertise.</span><br>Zero Cost Estimates.</h1>
-                <p>Get a no-obligation roofing estimate from vetted, local contractors in your area. Storm damage, leaks, full replacements — we connect you with the right pros fast.</p>
+                <p>Get a no-obligation roofing estimate from vetted, local contractors <span id="geoLocation">in your area</span>. Storm damage, leaks, full replacements — we connect you with the right pros fast.</p>
                 <div class="hero-stats">
                     <div>
                         <div class="hero-stat-value">15,000+</div>
@@ -1232,6 +1232,22 @@
         }, 1500);
     }
 
+
+    // Geo-location: detect visitor's state via IP
+    (function() {
+        var geo = document.getElementById('geoLocation');
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, 3000);
+        fetch('https://ipapi.co/json/', { signal: controller.signal })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                clearTimeout(timeoutId);
+                if (data && data.region && data.country_code === 'US') {
+                    geo.textContent = 'in ' + data.region;
+                }
+            })
+            .catch(function() { clearTimeout(timeoutId); });
+    })();
 
     // Phone input formatting
     document.getElementById('phone').addEventListener('input', function(e) {
